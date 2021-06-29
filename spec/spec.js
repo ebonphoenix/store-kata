@@ -35,7 +35,9 @@ describe("Store Kata - ", function() {
 	  });
   });
   fdescribe("Development Tests", function(){
-	  
+	  it("An empty basket should cost 0.00", function(){
+		  expect(basket.getPrice(today)).toEqual(0);
+	  });
   });
   
 });

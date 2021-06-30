@@ -1,6 +1,6 @@
 
 var basketPricer = function(stock){
-	var items = [];
+	var itemNames = [];
 	
 	var parseBasket = function(basketContents){
 		var basketContentsRegEx = /^Price a basket containing: (.*), bought .*$/;
@@ -44,10 +44,8 @@ var basketPricer = function(stock){
 		
 		var itemCount = matches[1]? matches[1] : 1, itemName = matches[2];
 		
-		var item = getItemBySingularName(itemName);
-		
 		for(var i = 0; i < itemCount; i++){
-			items.push(item);
+			itemNames.push(itemName);
 		}
 	}
 	
@@ -60,6 +58,8 @@ var basketPricer = function(stock){
 	var that = {
 		getPrice: function(basketContents){
 			parseBasket(basketContents);
+			
+			var items = itemNames.map(getItemBySingularName);
 			
 			var total = 0;
 			

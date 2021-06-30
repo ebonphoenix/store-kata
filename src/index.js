@@ -27,10 +27,25 @@ var basketPricer = function(){
 	var parseContents = function(basketContents){
 		if (!basketContents) return;
 		
-		var basketItemRegEx = /^(\d)?.* (\w+)$/;
-		var matches = basketContents.match(basketItemRegEx);
+		var basketItemGroupRegEx = /^(.*) and (.*)$/;
+		var matches = basketContents.match(basketItemGroupRegEx);
 		
 		//alert( "basketContents = " + basketContents + " | matches = " + matches);
+		
+		if(matches) {
+			parseBasketItem(matches[1]);
+			parseBasketItem(matches[2]);
+		}
+		else {
+			parseBasketItem(basketContents);
+		}
+		
+	}
+	
+	var parseBasketItem = function(basketItem){
+		var basketItemRegEx = /^(\d)?.* (\w+)$/;
+		var matches = basketItem.match(basketItemRegEx);
+		
 		if(!matches) return;
 		
 		var itemCount = matches[1]? matches[1] : 1, itemName = matches[2];
@@ -58,7 +73,7 @@ var basketPricer = function(){
 				total += items[i].price;
 			}
 			
-			return total;
+			return total.toFixed(2);
 		}
 	};
 	

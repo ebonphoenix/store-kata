@@ -20,15 +20,17 @@ var basketPricer = function(){
 	}
 	
 	var parseBasket = function(basketContents){
-		var basketContentsRegEx = /^Price a basket containing: (.*), .*$/;
+		var basketContentsRegEx = /^Price a basket containing: (.*), bought .*$/;
 		parseContents(basketContents.match(basketContentsRegEx)[1]);
 	}
 	
 	var parseContents = function(basketContents){
 		if (!basketContents) return;
 		
-		var basketItemRegEx = /(\d)? (\w+)$/;
+		var basketItemRegEx = /^(\d)?.* (\w+)$/;
 		var matches = basketContents.match(basketItemRegEx);
+		
+		//alert( "basketContents = " + basketContents + " | matches = " + matches);
 		if(!matches) return;
 		
 		var itemCount = matches[1]? matches[1] : 1, itemName = matches[2];

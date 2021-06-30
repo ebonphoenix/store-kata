@@ -37,6 +37,10 @@ describe("Store Kata - ", function() {
 		  expect(basket.getPrice("Price a basket containing: a loaf of bread, bought today")).toEqual(.80);
 	  });
 	  
+	  it("2 loaves of bread should cost 1.60", function(){
+		  expect(basket.getPrice("Price a basket containing: 2 loaves of bread, bought today")).toEqual(1.60);
+	  });
+	  
 	  it("A bottle of milk should cost 1.30", function(){
 		  expect(basket.getPrice("Price a basket containing: a bottle of milk, bought today")).toEqual(1.30);
 	  });

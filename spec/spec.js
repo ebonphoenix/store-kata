@@ -29,10 +29,21 @@ describe("Store Kata - ", function() {
 		  expect(basket.getPrice("Price a basket containing: an apple, bought today")).toEqual(.10);
 	  });
 	  
-	  it("A two apples should cost .20", function() {
+	  it("Two apples should cost .20", function() {
 		  expect(basket.getPrice("Price a basket containing: 2 apples, bought today")).toEqual(.20);
 	  });
 	  
+	  it("A loaf of bread should cost .80", function(){
+		  expect(basket.getPrice("Price a basket containing: a loaf of bread, bought today")).toEqual(.80);
+	  });
+	  
+	  it("A bottle of milk should cost 1.30", function(){
+		  expect(basket.getPrice("Price a basket containing: a bottle of milk, bought today")).toEqual(1.30);
+	  });
+	  	  
+	  it("A tin of soup should cost .65", function(){
+		  expect(basket.getPrice("Price a basket containing: a tin of soup, bought today")).toEqual(.65);
+	  });
   });
   
 });

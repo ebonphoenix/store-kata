@@ -2,7 +2,7 @@ describe("Store Kata - ", function() {
 	var basket;
 	
 	beforeEach(function(){
-		basket = basketPricer(storeStock);
+		basket = basketPricer(storeStock, basketParser());
 	});
   xdescribe("Acceptance Tests - WIP",function(){
 	  it("A basket containing: 3 tins of soup and 2 loaves of bread, bought today, should cost 3.15", function(){
@@ -50,9 +50,11 @@ describe("Store Kata - ", function() {
 	  it("A tin of soup should cost 0.65", function(){
 		  expect(basket.getPrice("Price a basket containing: a tin of soup, bought today")).toEqual("0.65");
 	  });
+	  
 	  it("4 apples and a loaf of bread should cost 1.20", function(){
 		  expect(basket.getPrice("Price a basket containing: 4 apples and a loaf of bread, bought today")).toEqual("1.20");
 	  } );
+	  
 	  it("a bottle of milk, 2 apples and 3 tins of soup should cost 3.45", function(){
 		  expect(basket.getPrice("Price a basket containing: a bottle of milk, 2 apples and 3 tins of soup, bought today")).toEqual("3.45");
 	  });

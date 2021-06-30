@@ -1,6 +1,30 @@
 
-var basketPricer = function(stock){
-	var itemNames = [];
+var basketPricer = function(stock, parser){
+	
+	var getItemBySingularName = function(itemName){		
+		var item = stock[itemName];		
+		if(!item && itemName.endsWith("s")) item = stock[itemName.substring(0,itemName.length-1)];
+		return item;
+	}
+	
+	var that = {
+		getPrice: function(basketContents){
+			var basketInfo = parser.parse(basketContents);
+			
+			var items = basketInfo.itemNames.map(getItemBySingularName);
+			var total = items.reduce((accumulator, item)=> accumulator + item.price,0);
+			
+			return total.toFixed(2);
+		}
+	};
+	
+	return that;
+};
+
+var basketParser = function(){
+	var basketInfo = {
+		itemNames : []
+	};
 	
 	var parseBasket = function(basketContents){
 		var basketContentsRegEx = /^Price a basket containing: (.*), bought .*$/;
@@ -45,27 +69,17 @@ var basketPricer = function(stock){
 		var itemCount = matches[1]? matches[1] : 1, itemName = matches[2];
 		
 		for(var i = 0; i < itemCount; i++){
-			itemNames.push(itemName);
+			basketInfo.itemNames.push(itemName);
 		}
-	}
-	
-	var getItemBySingularName = function(itemName){		
-		var item = stock[itemName];		
-		if(!item && itemName.endsWith("s")) item = stock[itemName.substring(0,itemName.length-1)];
-		return item;
 	}
 	
 	var that = {
-		getPrice: function(basketContents){
-			parseBasket(basketContents);
+		parse: function(stringToParse){
+			parseBasket(stringToParse);
 			
-			var items = itemNames.map(getItemBySingularName);
-			var total = items.reduce((accumulator, item)=> accumulator + item.price,0);
-			
-			return total.toFixed(2);
+			return basketInfo;
 		}
-	};
-	
+	}
 	return that;
 };
 

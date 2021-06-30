@@ -2,7 +2,7 @@ describe("Store Kata - ", function() {
 	var basket;
 	
 	beforeEach(function(){
-		basket = basketPricer();
+		basket = basketPricer(storeStock);
 	});
   xdescribe("Acceptance Tests - WIP",function(){
 	  it("A basket containing: 3 tins of soup and 2 loaves of bread, bought today, should cost 3.15", function(){

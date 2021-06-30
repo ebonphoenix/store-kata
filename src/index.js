@@ -1,23 +1,6 @@
-var basketPricer = function(){
+
+var basketPricer = function(stock){
 	var items = [];
-	var stock = {
-		"apple": {
-			unit: "single",
-			price: .10
-		},
-		"milk": {
-			unit: "bottle",
-			price: 1.30
-		},
-		"bread": {
-			unit: "loaf",
-			price: .80
-		},
-		"soup": {
-			unit: "tin",
-			price: .65
-		}
-	}
 	
 	var parseBasket = function(basketContents){
 		var basketContentsRegEx = /^Price a basket containing: (.*), bought .*$/;
@@ -90,3 +73,22 @@ var basketPricer = function(){
 	
 	return that;
 };
+
+var storeStock = {
+		"apple": {
+			unit: "single",
+			price: .10
+		},
+		"milk": {
+			unit: "bottle",
+			price: 1.30
+		},
+		"bread": {
+			unit: "loaf",
+			price: .80
+		},
+		"soup": {
+			unit: "tin",
+			price: .65
+		}
+	}

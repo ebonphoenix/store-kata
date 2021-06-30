@@ -26,7 +26,7 @@ describe("Store Kata - ", function() {
 		  expect(basket.getPrice("Price a basket containing: , bought today")).toEqual(0);
 	  });
 	  it("A single apple should cost .10", function() {
-		  expect(basket.getPrice("Price a basket containing: 1 apple, bought today")).toEqual(.10);
+		  expect(basket.getPrice("Price a basket containing: an apple, bought today")).toEqual(.10);
 	  });
 	  
 	  it("A two apples should cost .20", function() {

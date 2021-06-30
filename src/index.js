@@ -9,7 +9,8 @@ var basketPricer = function(){
 		if (!basketContents) return;
 		
 		var basketItemRegEx = /(\d) \w+/;
-		var itemCount = basketContents.match(basketItemRegEx)[1];
+		var matches = basketContents.match(basketItemRegEx);
+		var itemCount = matches? matches[1] : 1;
 		for(var i = 0; i < itemCount; i++){
 			items.push("apple");
 		}

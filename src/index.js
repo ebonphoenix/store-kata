@@ -60,12 +60,7 @@ var basketPricer = function(stock){
 			parseBasket(basketContents);
 			
 			var items = itemNames.map(getItemBySingularName);
-			
-			var total = 0;
-			
-			for(var i = 0; i < items.length; i++){
-				total += items[i].price;
-			}
+			var total = items.reduce((accumulator, item)=> accumulator + item.price,0);
 			
 			return total.toFixed(2);
 		}

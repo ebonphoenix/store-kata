@@ -27,22 +27,33 @@ var basketPricer = function(){
 	var parseContents = function(basketContents){
 		if (!basketContents) return;
 		
-		var basketItemGroupRegEx = /^(.*) and (.*)$/;
-		var matches = basketContents.match(basketItemGroupRegEx);
+		var andConjunction = " and ";
+		var commaConjunction = ", ";
 		
-		//alert( "basketContents = " + basketContents + " | matches = " + matches);
-		
-		if(matches) {
-			parseBasketItem(matches[1]);
-			parseBasketItem(matches[2]);
-		}
-		else {
+		var andConjIndex = basketContents.lastIndexOf(andConjunction);
+		var commaConjIndex = basketContents.lastIndexOf(commaConjunction);
+				
+		if(andConjIndex === -1 && commaConjIndex === -1 ){
 			parseBasketItem(basketContents);
+			return;
 		}
+		
+		var remainingBasketLength, basketItemIndex = 0;
+		if(andConjIndex > commaConjIndex){
+			remainingBasketLength = andConjIndex;
+			basketItemIndex = andConjIndex + andConjunction.length;
+		} else {
+			remainingBasketLength = commaConjIndex;
+			basketItemIndex = commaConjIndex + commaConjunction.length;
+		}
+		
+		parseBasketItem(basketContents.substring(basketItemIndex));
+		parseContents(basketContents.substring(0,remainingBasketLength));
 		
 	}
 	
 	var parseBasketItem = function(basketItem){
+		
 		var basketItemRegEx = /^(\d)?.* (\w+)$/;
 		var matches = basketItem.match(basketItemRegEx);
 		

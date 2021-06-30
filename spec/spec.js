@@ -53,6 +53,9 @@ describe("Store Kata - ", function() {
 	  it("4 apples and a loaf of bread should cost 1.20", function(){
 		  expect(basket.getPrice("Price a basket containing: 4 apples and a loaf of bread, bought today")).toEqual("1.20");
 	  } );
+	  it("a bottle of milk, 2 apples and 3 tins of soup should cost 3.45", function(){
+		  expect(basket.getPrice("Price a basket containing: a bottle of milk, 2 apples and 3 tins of soup, bought today")).toEqual("3.45");
+	  });
   });
   
 });

@@ -78,13 +78,13 @@ var basketParser = function(){
 	}
 	
 	var parseDate = function(purchaseDate){
-		var inDaysTimeRegEx = /^in (\d) days time$/
+		var inDaysTimeRegEx = /^in (\d+) days time$/
 		
 		var matches = purchaseDate.match(inDaysTimeRegEx);
 		
 		if(!matches) return;
 		
-		var daysOffset = matches[1];
+		var daysOffset = parseInt(matches[1],10);
 		basketInfo.purchaseDate = dateMath.addDays(basketInfo.purchaseDate, daysOffset);
 	}
 	
@@ -103,15 +103,16 @@ var dateMath = function (){
 		dateOnly: function (jsDate){
 			return new Date(jsDate.getFullYear(),jsDate.getMonth(),jsDate.getDate());
 		},
-		addDays: function(startDate, daysOffset){
-			var newDate = new Date(startDate);
+		addDays: function(date, daysOffset){
+			
+			var newDate = new Date(date);
 			newDate.setDate(newDate.getDate() + daysOffset);
 			return newDate;
 		},
-		addMonths: function (startDate, monthsOffset, retainDay){
-			var year = startDate.getFullYear();
-			var monthIndex = startDate.getMonth();
-			var day = retainDay? startDate.getDate():1;
+		addMonths: function (date, monthsOffset, retainDay){
+			var year = date.getFullYear();
+			var monthIndex = date.getMonth();
+			var day = retainDay? date.getDate():1;
 			
 			var newMonthIndex = monthsOffset + monthIndex;
 			if(newMonthIndex > 11){
@@ -125,8 +126,17 @@ var dateMath = function (){
 }();
 
 var storeDiscounts = function(){
+	var threeDaysHence = function(){
+		return dateMath.addDays( dateMath.dateOnly( new Date() ),3);
+	}
+	var endOfNextMonth = function(){
+		var startOfMonthAfterNext = dateMath.addMonths( dateMath.dateOnly ( new Date() ),2);
+		return dateMath.addDays(startOfMonthAfterNext, -1)
+	}
+	
 	var discounts = [{
-			startDate: dateMath.addDays( dateMath.dateOnly( new Date() ),3),
+			startDate: threeDaysHence(),
+			endDate: endOfNextMonth(),
 			applyDiscount: function(items, currentPrice){
 				var appleItems = items.filter(item => item.name === "apple");
 				var discount = appleItems.reduce((currentDiscount, item) => currentDiscount + (item.price * .1),0);
@@ -135,9 +145,13 @@ var storeDiscounts = function(){
 		}
 	];
 	
+	var dateWithinRange = function(date, rangeStart, rangeEnd){
+		return rangeStart <= date && rangeEnd > date;
+	};
+	
 	return {
 		getDiscountedPrice: function(items, currentPrice, purchaseDate){
-			var activeDiscounts = discounts.filter(discount => discount.startDate <= purchaseDate);
+			var activeDiscounts = discounts.filter(discount => dateWithinRange(purchaseDate,discount.startDate, discount.endDate));
 			return activeDiscounts.reduce((price, discount)=> discount.applyDiscount(items, price),currentPrice);
 		}
 	};

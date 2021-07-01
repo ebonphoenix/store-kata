@@ -94,6 +94,11 @@ describe("Store Kata - ", function() {
 							  
 				  expect(basket.getPrice("Price a basket containing: an apple, bought in " + daysBeforeStartOfMonthAfterNext + " days time")).toEqual("0.10");
 			  });
+		  });
+		  describe("soup and bread deal", function(){
+			it("two tins of soup and a loaf of bread today should cost 1.70", function(){
+			  expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought today")).toEqual("1.70");
+			});
 		  });		  
 	  });
 	  describe("Date math fun", function() {

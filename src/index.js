@@ -141,6 +141,19 @@ var storeDiscounts = function(){
 				var discount = appleItems.reduce((currentDiscount, item) => currentDiscount + (item.price * .1),0);
 				return currentPrice - discount;
 			}
+		},
+		{
+			startDate: dateMath.dateOnly( new Date() ),
+			endDate: dateMath.dateOnly(new Date()),
+			applyDiscount: function(items, currentPrice){
+				var soupItems = items.filter(item => item.name === "soup");
+				var breadItems = items.filter(item => item.name === "bread");
+				var discount = 0;
+				if(soupItems.length > 1 && breadItems.length > 0){
+					discount = breadItems[0].price * .5;
+				}
+				return currentPrice - discount;
+			}
 		}
 	];
 	

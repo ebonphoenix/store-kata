@@ -65,6 +65,19 @@ describe("Store Kata - ", function() {
 			  expect(basket.getPrice("Price a basket containing: an apple, bought in 3 days time")).toEqual("0.09");
 		  });
 	  });
+	  describe("Date math fun", function() {
+		  it("dateOnly should remove all time info from a date object",function(){
+			  var someComplexDate = new Date("August 19, 1975 23:15:30");
+			  var dateOnly = dateMath.dateOnly(someComplexDate);
+			  
+			  expect(dateOnly.getFullYear()).toEqual(1975);
+			  expect(dateOnly.getMonth()).toEqual(7);
+			  expect(dateOnly.getDate()).toEqual(19);
+			  expect(dateOnly.getHours()).toEqual(0);
+			  expect(dateOnly.getMinutes()).toEqual(0);
+			  expect(dateOnly.getSeconds()).toEqual(0);
+		  });
+	  });
   });
   
 });

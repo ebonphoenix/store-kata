@@ -107,7 +107,20 @@ var dateMath = function (){
 			var newDate = new Date(startDate);
 			newDate.setDate(newDate.getDate() + daysOffset);
 			return newDate;
-		}
+		},
+		addMonths: function (startDate, monthsOffset, retainDay){
+			var year = startDate.getFullYear();
+			var monthIndex = startDate.getMonth();
+			var day = retainDay? startDate.getDate():1;
+			
+			var newMonthIndex = monthsOffset + monthIndex;
+			if(newMonthIndex > 11){
+				years = Math.floor((newMonthIndex+1)/12);
+				year += years;
+			} 
+			
+			return new Date(year,newMonthIndex,day);
+		}			
 	};
 }();
 

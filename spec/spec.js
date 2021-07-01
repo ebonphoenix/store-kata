@@ -35,6 +35,9 @@ describe("Store Kata - ", function() {
 		  it("Two apples should cost 0.20", function() {
 			  expect(basket.getPrice("Price a basket containing: 2 apples, bought today")).toEqual("0.20");
 		  });
+		  it("100 apples should cost 10.00",function(){
+			  expect(basket.getPrice("Price a basket containing: 100 apples, bought today")).toEqual("10.00");
+		  });
 		  
 		  it("A loaf of bread should cost 0.80", function(){
 			  expect(basket.getPrice("Price a basket containing: a loaf of bread, bought today")).toEqual("0.80");
@@ -91,7 +94,7 @@ describe("Store Kata - ", function() {
 							  
 				  expect(basket.getPrice("Price a basket containing: an apple, bought in " + daysBeforeStartOfMonthAfterNext + " days time")).toEqual("0.10");
 			  });
-		  });			  
+		  });		  
 	  });
 	  describe("Date math fun", function() {
 		  it("dateOnly should remove all time info from a date object",function(){

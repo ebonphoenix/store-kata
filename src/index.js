@@ -65,7 +65,7 @@ var basketParser = function(){
 	
 	var parseBasketItem = function(basketItem){
 		
-		var basketItemRegEx = /^(\d)?.* (\w+)$/;
+		var basketItemRegEx = /^(\d+)?.* (\w+)$/;
 		var matches = basketItem.match(basketItemRegEx);
 		
 		if(!matches) return;

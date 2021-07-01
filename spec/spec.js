@@ -104,6 +104,25 @@ describe("Store Kata - ", function() {
 			  expect(newDate.getMonth()).toEqual(0);
 			  expect(newDate.getDate()).toEqual(9);
 		  });
+		  
+		  it("addMonths should advance the months by the amount specified and default to the first day of that month", function(){
+			  var someDate = new Date(2019,3,5);
+			  
+			  var newDate = dateMath.addMonths(someDate, 3);
+			  
+			  expect(newDate.getFullYear()).toEqual(2019);
+			  expect(newDate.getMonth()).toEqual(6);
+			  expect(newDate.getDate()).toEqual(1);
+		  });
+		  it("addMonths should advance the months by the amount specified and retain the day if specified", function(){
+			  var someDate = new Date(2019,3,5);
+			  
+			  var newDate = dateMath.addMonths(someDate, 3, true);
+			  
+			  expect(newDate.getFullYear()).toEqual(2019);
+			  expect(newDate.getMonth()).toEqual(6);
+			  expect(newDate.getDate()).toEqual(5);
+		  });
 	  });
   });
   

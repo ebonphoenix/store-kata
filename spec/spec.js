@@ -77,6 +77,33 @@ describe("Store Kata - ", function() {
 			  expect(dateOnly.getMinutes()).toEqual(0);
 			  expect(dateOnly.getSeconds()).toEqual(0);
 		  });
+		  it("addDays should advance the days by the specified amount", function(){
+			  var someDate = new Date(2019,3,5);
+			  
+			  var newDate = dateMath.addDays(someDate, 3);
+			  
+			  expect(newDate.getFullYear()).toEqual(2019);
+			  expect(newDate.getMonth()).toEqual(3);
+			  expect(newDate.getDate()).toEqual(8);
+		  });
+		  it("addDays should deduct the days by the specified amount when negative number is used", function(){
+			  var someDate = new Date(2019,3,5);
+			  
+			  var newDate = dateMath.addDays(someDate, -1);
+			  
+			  expect(newDate.getFullYear()).toEqual(2019);
+			  expect(newDate.getMonth()).toEqual(3);
+			  expect(newDate.getDate()).toEqual(4);
+		  });
+		  it("addDays should advance month and year when appropriate", function(){
+			  var someDate = new Date(1999,11,25);
+			  
+			  var newDate = dateMath.addDays(someDate, 15);
+			  
+			  expect(newDate.getFullYear()).toEqual(2000);
+			  expect(newDate.getMonth()).toEqual(0);
+			  expect(newDate.getDate()).toEqual(9);
+		  });
 	  });
   });
   

@@ -61,20 +61,36 @@ describe("Store Kata - ", function() {
 		  });
 	  });
 	  describe("discount funkiness", function(){
-		  it("an apple bought three days from now should cost 0.09",function(){
-			  expect(basket.getPrice("Price a basket containing: an apple, bought in 3 days time")).toEqual("0.09");
-		  });
-		  it("an apple bought at the start of the month after next should cost 0.10", function(){
+		  describe("discounted apples", function(){
+			  it("an apple bought two days from now should cost 0.10",function(){
+				  expect(basket.getPrice("Price a basket containing: an apple, bought in 2 days time")).toEqual("0.10");
+			  });
+			  it("an apple bought three days from now should cost 0.09",function(){
+				  expect(basket.getPrice("Price a basket containing: an apple, bought in 3 days time")).toEqual("0.09");
+			  });
 			  
-			  var currentDate = dateMath.dateOnly(new Date());
-			  var startOfMonthAfterNext = dateMath.addMonths(currentDate,2);
-			  
-			  var Difference_In_Time = startOfMonthAfterNext.getTime() - currentDate.getTime();
- 
-			  // To calculate the no. of days between two dates
-			  var daysBeforeStartOfMonthAfterNext = Difference_In_Time / (1000 * 3600 * 24);
-			  			  
-			  expect(basket.getPrice("Price a basket containing: an apple, bought in " + daysBeforeStartOfMonthAfterNext + " days time")).toEqual("0.10");
+			  it("an apple bought at the last day of next month should cost 0.09", function(){
+				  var currentDate = dateMath.dateOnly(new Date());
+				  var startOfMonthAfterNext = dateMath.addMonths(currentDate,2);
+				  
+				  var Difference_In_Time = startOfMonthAfterNext.getTime() - currentDate.getTime();
+	 
+				  // To calculate the no. of days between two dates
+				  var daysBeforeStartOfMonthAfterNext = Difference_In_Time / (1000 * 3600 * 24);
+				  expect(basket.getPrice("Price a basket containing: an apple, bought in " + (daysBeforeStartOfMonthAfterNext - 1) + " days time")).toEqual("0.09");
+			  });
+			  it("an apple bought at the start of the month after next should cost 0.10", function(){
+				  
+				  var currentDate = dateMath.dateOnly(new Date());
+				  var startOfMonthAfterNext = dateMath.addMonths(currentDate,2);
+				  
+				  var Difference_In_Time = startOfMonthAfterNext.getTime() - currentDate.getTime();
+	 
+				  // To calculate the no. of days between two dates
+				  var daysBeforeStartOfMonthAfterNext = Difference_In_Time / (1000 * 3600 * 24);
+							  
+				  expect(basket.getPrice("Price a basket containing: an apple, bought in " + daysBeforeStartOfMonthAfterNext + " days time")).toEqual("0.10");
+			  });
 		  });			  
 	  });
 	  describe("Date math fun", function() {

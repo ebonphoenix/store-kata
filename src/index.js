@@ -81,7 +81,6 @@ var basketParser = function(){
 		var inDaysTimeRegEx = /^in (\d+) days time$/
 		
 		var matches = purchaseDate.match(inDaysTimeRegEx);
-		
 		if(!matches) return;
 		
 		var daysOffset = parseInt(matches[1],10);
@@ -146,7 +145,7 @@ var storeDiscounts = function(){
 	];
 	
 	var dateWithinRange = function(date, rangeStart, rangeEnd){
-		return rangeStart <= date && rangeEnd > date;
+		return rangeStart <= date && rangeEnd >= date;
 	};
 	
 	return {

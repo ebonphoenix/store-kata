@@ -150,7 +150,11 @@ var storeDiscounts = function(){
 				var breadItems = items.filter(item => item.name === "bread");
 				var discount = 0;
 				if(soupItems.length > 1 && breadItems.length > 0){
-					discount = breadItems[0].price * .5;
+					var itemDiscountAmount = breadItems[0].price * .5;
+					var numberOfDiscounts = Math.floor( soupItems.length/2 );
+					for(var i = 0; i < numberOfDiscounts ;i++){
+						discount += itemDiscountAmount;
+					}
 				}
 				return currentPrice - discount;
 			}

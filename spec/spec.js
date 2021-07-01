@@ -77,8 +77,6 @@ describe("Store Kata - ", function() {
 				  var startOfMonthAfterNext = dateMath.addMonths(currentDate,2);
 				  
 				  var Difference_In_Time = startOfMonthAfterNext.getTime() - currentDate.getTime();
-	 
-				  // To calculate the no. of days between two dates
 				  var daysBeforeStartOfMonthAfterNext = Difference_In_Time / (1000 * 3600 * 24);
 				  expect(basket.getPrice("Price a basket containing: an apple, bought in " + (daysBeforeStartOfMonthAfterNext - 1) + " days time")).toEqual("0.09");
 			  });
@@ -88,16 +86,20 @@ describe("Store Kata - ", function() {
 				  var startOfMonthAfterNext = dateMath.addMonths(currentDate,2);
 				  
 				  var Difference_In_Time = startOfMonthAfterNext.getTime() - currentDate.getTime();
-	 
-				  // To calculate the no. of days between two dates
 				  var daysBeforeStartOfMonthAfterNext = Difference_In_Time / (1000 * 3600 * 24);
 							  
 				  expect(basket.getPrice("Price a basket containing: an apple, bought in " + daysBeforeStartOfMonthAfterNext + " days time")).toEqual("0.10");
 			  });
 		  });
 		  describe("soup and bread deal", function(){
-			it("two tins of soup and a loaf of bread today should cost 1.70", function(){
+			it("bread should be half price when 2 tins of soup are purchased today", function(){
 			  expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought today")).toEqual("1.70");
+			});
+			it("Only one bread should be discounted when 3 tins of soup are puchased today", function(){
+			  expect(basket.getPrice("Price a basket containing: 3 tins of soup and 2 loaves of bread, bought today")).toEqual("3.15");
+			});
+			it("When four cans of soup and two loaves of bread are puchased both loaves should be discounted", function(){
+			  expect(basket.getPrice("Price a basket containing: 4 tins of soup and 2 loaves of bread, bought today")).toEqual("3.40");
 			});
 		  });		  
 	  });

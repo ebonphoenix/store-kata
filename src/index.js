@@ -1,9 +1,9 @@
 
-var basketPricer = function(stock, parser){
+var basketPricer = function(stock, discounts, parser){
 	
 	var getItemBySingularName = function(itemName){		
-		var item = stock[itemName];		
-		if(!item && itemName.endsWith("s")) item = stock[itemName.substring(0,itemName.length-1)];
+		var item = stock.getItemByName(itemName);		
+		if(!item && itemName.endsWith("s")) item = stock.getItemByName(itemName.substring(0,itemName.length-1));
 		return item;
 	}
 	
@@ -13,6 +13,7 @@ var basketPricer = function(stock, parser){
 			
 			var items = basketInfo.itemNames.map(getItemBySingularName);
 			var total = items.reduce((accumulator, item)=> accumulator + item.price,0);
+			total = discounts.getDiscountedPrice(items, total, basketInfo.purchaseDate);
 			
 			return total.toFixed(2);
 		}
@@ -23,12 +24,15 @@ var basketPricer = function(stock, parser){
 
 var basketParser = function(){
 	var basketInfo = {
-		itemNames : []
+		itemNames : [],
+		purchaseDate: dateMath.dateOnly( new Date())
 	};
 	
 	var parseBasket = function(basketContents){
-		var basketContentsRegEx = /^Price a basket containing: (.*), bought .*$/;
-		parseContents(basketContents.match(basketContentsRegEx)[1]);
+		var basketContentsRegEx = /^Price a basket containing: (.*), bought (.*)$/;
+		var matches = basketContents.match(basketContentsRegEx);
+		parseContents(matches[1]);
+		parseDate(matches[2]);
 	}
 	
 	var parseContents = function(basketContents){
@@ -73,6 +77,17 @@ var basketParser = function(){
 		}
 	}
 	
+	var parseDate = function(purchaseDate){
+		var inDaysTimeRegEx = /^in (\d) days time$/
+		
+		var matches = purchaseDate.match(inDaysTimeRegEx);
+		
+		if(!matches) return;
+		
+		var daysOffset = matches[1];
+		basketInfo.purchaseDate = dateMath.addDays(basketInfo.purchaseDate, daysOffset);
+	}
+	
 	var that = {
 		parse: function(stringToParse){
 			parseBasket(stringToParse);
@@ -83,21 +98,64 @@ var basketParser = function(){
 	return that;
 };
 
-var storeStock = {
-		"apple": {
+var dateMath = function (){
+	return {
+		dateOnly: function (jsDate){
+			return new Date(jsDate.getFullYear(),jsDate.getMonth(),jsDate.getDate());
+		},
+		addDays: function(startDate, daysOffset){
+			var newDate = new Date(startDate);
+			newDate.setDate(newDate.getDate() + daysOffset);
+			return newDate;
+		}
+	};
+}();
+
+var storeDiscounts = function(){
+	var discounts = [{
+			startDate: dateMath.addDays( dateMath.dateOnly( new Date() ),3),
+			applyDiscount: function(items, currentPrice){
+				var appleItems = items.filter(item => item.name === "apple");
+				var discount = appleItems.reduce((currentDiscount, item) => currentDiscount + (item.price * .1),0);
+				return currentPrice - discount;
+			}
+		}
+	];
+	
+	return {
+		getDiscountedPrice: function(items, currentPrice, purchaseDate){
+			var activeDiscounts = discounts.filter(discount => discount.startDate <= purchaseDate);
+			return activeDiscounts.reduce((price, discount)=> discount.applyDiscount(items, price),currentPrice);
+		}
+	};
+}();
+
+var storeStock = function(){ 
+	var storeItems = [{
+			name: "apple",
 			unit: "single",
 			price: .10
 		},
-		"milk": {
+		{
+			name: "milk",
 			unit: "bottle",
 			price: 1.30
 		},
-		"bread": {
+		{
+			name: "bread",
 			unit: "loaf",
 			price: .80
 		},
-		"soup": {
+		{
+			name: "soup",
 			unit: "tin",
 			price: .65
-		}
-	}
+		}];
+	
+	return {
+		getItemByName: function(itemName){
+			return storeItems.find(item => item.name===itemName);
+		},
+		items: storeItems
+	};
+}();

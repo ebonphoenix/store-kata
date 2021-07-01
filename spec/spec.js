@@ -123,6 +123,26 @@ describe("Store Kata - ", function() {
 			  expect(newDate.getMonth()).toEqual(6);
 			  expect(newDate.getDate()).toEqual(5);
 		  });
+		  it("addMonths should deduct the month if a negative number is used", function(){
+			  var someDate = new Date(2019,3,5);
+			  
+			  var newDate = dateMath.addMonths(someDate, -2);
+			  
+			  expect(newDate.getFullYear()).toEqual(2019);
+			  expect(newDate.getMonth()).toEqual(1);
+			  expect(newDate.getDate()).toEqual(1);
+		  });
+		  
+		  it("addMonths should handle year end", function(){
+			  var someDate = new Date(2019,10,5);
+			  
+			  var newDate = dateMath.addMonths(someDate, 20);
+			  
+			  expect(newDate.getFullYear()).toEqual(2023);
+			  expect(newDate.getMonth()).toEqual(6);
+			  expect(newDate.getDate()).toEqual(1);
+		  });
+		  
 	  });
   });
   

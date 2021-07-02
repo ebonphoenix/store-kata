@@ -12,6 +12,10 @@ var basketPricer = function(stock, discounts, parser){
 			var basketInfo = parser.parse(basketContents);
 			
 			var items = basketInfo.itemNames.map(getItemBySingularName);
+			if(items.filter(item => !item).length > 0){
+				return "An item not stocked was requested, please remove from basket";
+			}
+			
 			var total = items.reduce((accumulator, item)=> accumulator + item.price,0);
 			total = discounts.getDiscountedPrice(items, total, basketInfo.purchaseDate);
 			

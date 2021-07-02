@@ -22,6 +22,7 @@ var basketPricer = function(stock, discounts, parser){
 	return that;
 };
 
+/* class to handle string parsing of input */
 var basketParser = function(){
 	var basketInfo = {
 		itemNames : [],
@@ -78,12 +79,16 @@ var basketParser = function(){
 	}
 	
 	var parseDate = function(purchaseDate){
-		var inDaysTimeRegEx = /^in (\d+) days time$/
+		var inDaysTimeRegEx = /^(?:in )?(\d+) days? (\w*)$/
 		
 		var matches = purchaseDate.match(inDaysTimeRegEx);
 		if(!matches) return;
 		
+		
 		var daysOffset = parseInt(matches[1],10);
+		if (matches[2]==="ago"){
+			daysOffset = daysOffset * -1
+		}
 		basketInfo.purchaseDate = dateMath.addDays(basketInfo.purchaseDate, daysOffset);
 	}
 	
@@ -133,17 +138,14 @@ var dateMath = function (){
 
 
 var storeDiscounts = function(){
-	var threeDaysHence = function(){
-		return dateMath.addDays( dateMath.dateOnly( new Date() ),3);
-	}
-	var endOfNextMonth = function(){
-		var startOfMonthAfterNext = dateMath.addMonths( dateMath.dateOnly ( new Date() ),2);
-		return dateMath.addDays(startOfMonthAfterNext, -1)
-	}
+	var today = dateMath.dateOnly( new Date() );
+	var threeDaysHence = dateMath.addDays( today,3);
+	var endOfNextMonth = dateMath.addDays(dateMath.addMonths( today,2), -1);
+	var yesterday = dateMath.addDays( today, -1 );
 	
 	var discounts = [{
-			startDate: threeDaysHence(),
-			endDate: endOfNextMonth(),
+			startDate: threeDaysHence,
+			endDate: endOfNextMonth,
 			applyDiscount: function(items, currentPrice){
 				var appleItems = items.filter(item => item.name === "apple");
 				var discount = appleItems.reduce((currentDiscount, item) => currentDiscount + (item.price * .1),0);
@@ -151,8 +153,8 @@ var storeDiscounts = function(){
 			}
 		},
 		{
-			startDate: dateMath.dateOnly( new Date() ),
-			endDate: dateMath.dateOnly(new Date()),
+			startDate: yesterday,
+			endDate: today,
 			applyDiscount: function(items, currentPrice){
 				var soupItems = items.filter(item => item.name === "soup");
 				var breadItems = items.filter(item => item.name === "bread");

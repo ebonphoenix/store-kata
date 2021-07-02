@@ -87,12 +87,19 @@ describe("Store Kata - ", function() {
 			  });
 		  });
 		  describe("soup and bread deal", function(){
+			  
 			it("bread should be half price when 2 tins of soup are purchased today", function(){
 			  expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought today")).toEqual("1.70");
 			});
 			
 			it("When four cans of soup and two loaves of bread are puchased both loaves should be discounted", function(){
 			  expect(basket.getPrice("Price a basket containing: 4 tins of soup and 2 loaves of bread, bought today")).toEqual("3.40");
+			});
+			it("the soup and bread deal should not apply to purchases made before yesterday",function(){
+				expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought 2 days ago")).toEqual("2.10");
+			});
+			it("the soup and bread deal should apply to purchases made yesterday",function(){
+				expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought 1 day ago")).toEqual("1.70");
 			});
 		  });		  
 	  });

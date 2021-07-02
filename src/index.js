@@ -157,7 +157,7 @@ var storeDiscounts = function(){
 		},
 		{
 			startDate: yesterday,
-			endDate: today,
+			endDate: dateMath.addDays(yesterday,7),
 			applyDiscount: function(items, currentPrice){
 				var soupItems = items.filter(item => item.name === "soup");
 				var breadItems = items.filter(item => item.name === "bread");

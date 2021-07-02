@@ -1,13 +1,8 @@
 describe("Store Kata - ", function() {
-	var basket;
+  var basket;
 	
-	beforeEach(function(){
-		basket = basketPricer(storeStock, storeDiscounts, basketParser());
-	});
-  xdescribe("Acceptance Tests - WIP",function(){
-	  it("A basket containing: 3 apples, 2 tins of soup and a loaf of bread, bought in 5 days time, should cost 1.97", function(){
-		  expect(basket.getPrice("Price a basket containing: 3 apples, 2 tins of soup and a loaf of bread, bought in 5 days time")).toEqual("1.97");
-	  });
+  beforeEach(function(){
+	basket = basketPricer(storeStock, storeDiscounts, basketParser());
   });
   describe("Acceptance Tests", function(){
 	  
@@ -21,6 +16,9 @@ describe("Store Kata - ", function() {
 	  
 	  it("A basket containing: 3 tins of soup and 2 loaves of bread, bought today, should cost 3.15", function(){
 		  expect(basket.getPrice("Price a basket containing: 3 tins of soup and 2 loaves of bread, bought today")).toEqual("3.15");
+	  });
+	  it("A basket containing: 3 apples, 2 tins of soup and a loaf of bread, bought in 5 days time, should cost 1.97", function(){
+		  expect(basket.getPrice("Price a basket containing: 3 apples, 2 tins of soup and a loaf of bread, bought in 5 days time")).toEqual("1.97");
 	  });
 	  
   });
@@ -95,11 +93,17 @@ describe("Store Kata - ", function() {
 			it("When four cans of soup and two loaves of bread are puchased both loaves should be discounted", function(){
 			  expect(basket.getPrice("Price a basket containing: 4 tins of soup and 2 loaves of bread, bought today")).toEqual("3.40");
 			});
-			it("the soup and bread deal should not apply to purchases made before yesterday",function(){
+			it("the soup and bread deal should not apply to purchases made before the sale",function(){
 				expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought 2 days ago")).toEqual("2.10");
 			});
-			it("the soup and bread deal should apply to purchases made yesterday",function(){
+			it("the soup and bread deal should apply to purchases made the first day of the sale",function(){
 				expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought 1 day ago")).toEqual("1.70");
+			});
+			it("the soup and bread deal should apply to purchases made the last day of the sale",function(){
+				expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought in 6 days time")).toEqual("1.70");
+			});
+			it("the soup and bread deal should not apply to purchases made after the last day of the sale",function(){
+				expect(basket.getPrice("Price a basket containing: 2 tins of soup and a loaf of bread, bought in 7 days time")).toEqual("2.10");
 			});
 		  });		  
 	  });
@@ -115,116 +119,122 @@ describe("Store Kata - ", function() {
 			  expect(dateOnly.getMinutes()).toEqual(0);
 			  expect(dateOnly.getSeconds()).toEqual(0);
 		  });
-		  it("addDays should advance the days by the specified amount", function(){
-			  var someDate = new Date(2019,3,5);
-			  
-			  var newDate = dateMath.addDays(someDate, 3);
-			  
-			  expect(newDate.getFullYear()).toEqual(2019);
-			  expect(newDate.getMonth()).toEqual(3);
-			  expect(newDate.getDate()).toEqual(8);
+		  describe("addDays method", function(){
+			  it("addDays should advance the days by the specified amount", function(){
+				  var someDate = new Date(2019,3,5);
+				  
+				  var newDate = dateMath.addDays(someDate, 3);
+				  
+				  expect(newDate.getFullYear()).toEqual(2019);
+				  expect(newDate.getMonth()).toEqual(3);
+				  expect(newDate.getDate()).toEqual(8);
+			  });
+					  
+			  it("addDays should deduct the days by the specified amount when negative number is used", function(){
+				  var someDate = new Date(2019,3,5);
+				  
+				  var newDate = dateMath.addDays(someDate, -1);
+				  
+				  expect(newDate.getFullYear()).toEqual(2019);
+				  expect(newDate.getMonth()).toEqual(3);
+				  expect(newDate.getDate()).toEqual(4);
+			  });
+			  it("addDays should advance month and year when appropriate", function(){
+				  var someDate = new Date(1999,11,25);
+				  
+				  var newDate = dateMath.addDays(someDate, 15);
+				  
+				  expect(newDate.getFullYear()).toEqual(2000);
+				  expect(newDate.getMonth()).toEqual(0);
+				  expect(newDate.getDate()).toEqual(9);
+			  });
 		  });
-		  		  
-		  it("addDays should deduct the days by the specified amount when negative number is used", function(){
-			  var someDate = new Date(2019,3,5);
+		  describe("addMonths method", function(){
+			  it("addMonths should advance the months by the amount specified and default to the first day of that month", function(){
+				  var someDate = new Date(2019,3,5);
+				  
+				  var newDate = dateMath.addMonths(someDate, 3);
+				  
+				  expect(newDate.getFullYear()).toEqual(2019);
+				  expect(newDate.getMonth()).toEqual(6);
+				  expect(newDate.getDate()).toEqual(1);
+			  });
+			  it("addMonths should advance the months by the amount specified and retain the day if specified", function(){
+				  var someDate = new Date(2019,3,5);
+				  
+				  var newDate = dateMath.addMonths(someDate, 3, true);
+				  
+				  expect(newDate.getFullYear()).toEqual(2019);
+				  expect(newDate.getMonth()).toEqual(6);
+				  expect(newDate.getDate()).toEqual(5);
+			  });
+			  it("addMonths should deduct the month if a negative number is used", function(){
+				  var someDate = new Date(2019,3,5);
+				  
+				  var newDate = dateMath.addMonths(someDate, -2);
+				  
+				  expect(newDate.getFullYear()).toEqual(2019);
+				  expect(newDate.getMonth()).toEqual(1);
+				  expect(newDate.getDate()).toEqual(1);
+			  });
 			  
-			  var newDate = dateMath.addDays(someDate, -1);
-			  
-			  expect(newDate.getFullYear()).toEqual(2019);
-			  expect(newDate.getMonth()).toEqual(3);
-			  expect(newDate.getDate()).toEqual(4);
+			  it("addMonths should handle year end", function(){
+				  var someDate = new Date(2019,10,5);
+				  
+				  var newDate = dateMath.addMonths(someDate, 20);
+				  
+				  expect(newDate.getFullYear()).toEqual(2023);
+				  expect(newDate.getMonth()).toEqual(6);
+				  expect(newDate.getDate()).toEqual(1);
+			  });
 		  });
-		  it("addDays should advance month and year when appropriate", function(){
-			  var someDate = new Date(1999,11,25);
-			  
-			  var newDate = dateMath.addDays(someDate, 15);
-			  
-			  expect(newDate.getFullYear()).toEqual(2000);
-			  expect(newDate.getMonth()).toEqual(0);
-			  expect(newDate.getDate()).toEqual(9);
+		  describe("daysBetweenDates method", function(){
+			  it("daysBetweenDates should return 3 for days three days apart", function(){
+				  var earlyDate = new Date(1999,11,30);
+				  var laterDate = new Date(2000,0, 2);
+				  
+				  expect(dateMath.daysBetweenDates(earlyDate,laterDate)).toEqual(3);
+			  });
+			  it("daysBetweenDates should return 0 for the same day", function(){
+				  var someDate = new Date(1999,11,30);
+				  
+				  expect(dateMath.daysBetweenDates(someDate,someDate)).toEqual(0);
+			  });
 		  });
-		  
-		  it("addMonths should advance the months by the amount specified and default to the first day of that month", function(){
-			  var someDate = new Date(2019,3,5);
-			  
-			  var newDate = dateMath.addMonths(someDate, 3);
-			  
-			  expect(newDate.getFullYear()).toEqual(2019);
-			  expect(newDate.getMonth()).toEqual(6);
-			  expect(newDate.getDate()).toEqual(1);
-		  });
-		  it("addMonths should advance the months by the amount specified and retain the day if specified", function(){
-			  var someDate = new Date(2019,3,5);
-			  
-			  var newDate = dateMath.addMonths(someDate, 3, true);
-			  
-			  expect(newDate.getFullYear()).toEqual(2019);
-			  expect(newDate.getMonth()).toEqual(6);
-			  expect(newDate.getDate()).toEqual(5);
-		  });
-		  it("addMonths should deduct the month if a negative number is used", function(){
-			  var someDate = new Date(2019,3,5);
-			  
-			  var newDate = dateMath.addMonths(someDate, -2);
-			  
-			  expect(newDate.getFullYear()).toEqual(2019);
-			  expect(newDate.getMonth()).toEqual(1);
-			  expect(newDate.getDate()).toEqual(1);
-		  });
-		  
-		  it("addMonths should handle year end", function(){
-			  var someDate = new Date(2019,10,5);
-			  
-			  var newDate = dateMath.addMonths(someDate, 20);
-			  
-			  expect(newDate.getFullYear()).toEqual(2023);
-			  expect(newDate.getMonth()).toEqual(6);
-			  expect(newDate.getDate()).toEqual(1);
-		  });
-		  
-		  it("daysBetweenDates should return 3 for days three days apart", function(){
-			  var earlyDate = new Date(1999,11,30);
-			  var laterDate = new Date(2000,0, 2);
-			  
-			  expect(dateMath.daysBetweenDates(earlyDate,laterDate)).toEqual(3);
-		  });
-		  it("daysBetweenDates should return 0 for the same day", function(){
-			  var someDate = new Date(1999,11,30);
-			  
-			  expect(dateMath.daysBetweenDates(someDate,someDate)).toEqual(0);
-		  });
-		  it("dateWithinRange should return false if the date is before the range start date", function(){
-			  var date = new Date(2013,1,3);
-			  var rangeStartDate = new Date(2013,1,4);
-			  var rangeEndDate = new Date(2013,1,6);
-			  
-			  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeFalse();
-		  });
-		  it("dateWithinRange should return true if the same date as the range start date", function(){
-			  var date = new Date(2013,1,4);
-			  var rangeEndDate = new Date(2013,1,6);
-			  
-			  expect(dateMath.dateWithinRange(date,date,rangeEndDate)).toBeTrue();
-		  });
-		  it("dateWithinRange should return true if the date is between the range start date and the range end date", function(){
-			  var date = new Date(2013,1,5);
-			  var rangeStartDate = new Date(2013,1,4);
-			  var rangeEndDate = new Date(2013,1,6);
-			  
-			  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeTrue();
-		  });
-		  it("dateWithinRange should return true if the same date as the range end date", function(){
-			  var date = new Date(2013,1,6);
-			  var rangeStartDate = new Date(2013,1,4);
-			  
-			  expect(dateMath.dateWithinRange(date,rangeStartDate,date)).toBeTrue();
-		  });
-		  it("dateWithinRange should return false if the date is after the range end date", function(){
-			  var date = new Date(2013,1,7);
-			  var rangeStartDate = new Date(2013,1,4);
-			  var rangeEndDate = new Date(2013,1,6);
-			  
-			  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeFalse();
+		  describe("dateWithinRange method", function(){
+			  it("dateWithinRange should return false if the date is before the range start date", function(){
+				  var date = new Date(2013,1,3);
+				  var rangeStartDate = new Date(2013,1,4);
+				  var rangeEndDate = new Date(2013,1,6);
+				  
+				  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeFalse();
+			  });
+			  it("dateWithinRange should return true if the same date as the range start date", function(){
+				  var date = new Date(2013,1,4);
+				  var rangeEndDate = new Date(2013,1,6);
+				  
+				  expect(dateMath.dateWithinRange(date,date,rangeEndDate)).toBeTrue();
+			  });
+			  it("dateWithinRange should return true if the date is between the range start date and the range end date", function(){
+				  var date = new Date(2013,1,5);
+				  var rangeStartDate = new Date(2013,1,4);
+				  var rangeEndDate = new Date(2013,1,6);
+				  
+				  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeTrue();
+			  });
+			  it("dateWithinRange should return true if the same date as the range end date", function(){
+				  var date = new Date(2013,1,6);
+				  var rangeStartDate = new Date(2013,1,4);
+				  
+				  expect(dateMath.dateWithinRange(date,rangeStartDate,date)).toBeTrue();
+			  });
+			  it("dateWithinRange should return false if the date is after the range end date", function(){
+				  var date = new Date(2013,1,7);
+				  var rangeStartDate = new Date(2013,1,4);
+				  var rangeEndDate = new Date(2013,1,6);
+				  
+				  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeFalse();
+			  });
 		  });
 	  });
   });

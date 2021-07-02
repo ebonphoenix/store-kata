@@ -97,13 +97,16 @@ var basketParser = function(){
 	return that;
 };
 
+
+
+/*A set of methods to help manipulate dates*/
+
 var dateMath = function (){
 	return {
 		dateOnly: function (jsDate){
 			return new Date(jsDate.getFullYear(),jsDate.getMonth(),jsDate.getDate());
 		},
 		addDays: function(date, daysOffset){
-			
 			var newDate = new Date(date);
 			newDate.setDate(newDate.getDate() + daysOffset);
 			return newDate;
@@ -120,9 +123,14 @@ var dateMath = function (){
 			} 
 			
 			return new Date(year,newMonthIndex,day);
-		}			
+		},
+		daysBetweenDates: function(firstDate, secondDate){
+			var Difference_In_Time = secondDate.getTime() - firstDate.getTime();
+			return Difference_In_Time / (1000 * 3600 * 24);
+		}
 	};
 }();
+
 
 var storeDiscounts = function(){
 	var threeDaysHence = function(){

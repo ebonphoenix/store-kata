@@ -132,6 +132,9 @@ var dateMath = function (){
 		daysBetweenDates: function(firstDate, secondDate){
 			var Difference_In_Time = secondDate.getTime() - firstDate.getTime();
 			return Difference_In_Time / (1000 * 3600 * 24);
+		},
+	    dateWithinRange: function(date, rangeStart, rangeEnd){
+			return rangeStart <= date && rangeEnd >= date;
 		}
 	};
 }();
@@ -171,13 +174,10 @@ var storeDiscounts = function(){
 		}
 	];
 	
-	var dateWithinRange = function(date, rangeStart, rangeEnd){
-		return rangeStart <= date && rangeEnd >= date;
-	};
 	
 	return {
 		getDiscountedPrice: function(items, currentPrice, purchaseDate){
-			var activeDiscounts = discounts.filter(discount => dateWithinRange(purchaseDate,discount.startDate, discount.endDate));
+			var activeDiscounts = discounts.filter(discount => dateMath.dateWithinRange(purchaseDate,discount.startDate, discount.endDate));
 			return activeDiscounts.reduce((price, discount)=> discount.applyDiscount(items, price),currentPrice);
 		}
 	};

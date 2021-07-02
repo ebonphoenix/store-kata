@@ -193,6 +193,39 @@ describe("Store Kata - ", function() {
 			  
 			  expect(dateMath.daysBetweenDates(someDate,someDate)).toEqual(0);
 		  });
+		  it("dateWithinRange should return false if the date is before the range start date", function(){
+			  var date = new Date(2013,1,3);
+			  var rangeStartDate = new Date(2013,1,4);
+			  var rangeEndDate = new Date(2013,1,6);
+			  
+			  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeFalse();
+		  });
+		  it("dateWithinRange should return true if the same date as the range start date", function(){
+			  var date = new Date(2013,1,4);
+			  var rangeEndDate = new Date(2013,1,6);
+			  
+			  expect(dateMath.dateWithinRange(date,date,rangeEndDate)).toBeTrue();
+		  });
+		  it("dateWithinRange should return true if the date is between the range start date and the range end date", function(){
+			  var date = new Date(2013,1,5);
+			  var rangeStartDate = new Date(2013,1,4);
+			  var rangeEndDate = new Date(2013,1,6);
+			  
+			  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeTrue();
+		  });
+		  it("dateWithinRange should return true if the same date as the range end date", function(){
+			  var date = new Date(2013,1,6);
+			  var rangeStartDate = new Date(2013,1,4);
+			  
+			  expect(dateMath.dateWithinRange(date,rangeStartDate,date)).toBeTrue();
+		  });
+		  it("dateWithinRange should return false if the date is after the range end date", function(){
+			  var date = new Date(2013,1,7);
+			  var rangeStartDate = new Date(2013,1,4);
+			  var rangeEndDate = new Date(2013,1,6);
+			  
+			  expect(dateMath.dateWithinRange(date,rangeStartDate,rangeEndDate)).toBeFalse();
+		  });
 	  });
   });
   
